@@ -1,0 +1,13 @@
+{
+  "n_stars": 26567,
+  "t_span_myr": 5.0,
+  "dt_myr": 0.002,
+  "cheb_degree": 12,
+  "n_samples": 501,
+  "cheb_pos_err_median_pc": 7.384806565961678e-12,
+  "cheb_pos_err_max_pc": 0.03566085291658862,
+  "perihelion_err_median_pc": 6.251477877583511e-07,
+  "perihelion_err_p99_pc": 2.4298639593070015e-05,
+  "perihelion_err_max_pc": 0.0035112667560799338,
+  "perihelion_err_max_close_pc": 0.0011771378952956102
+}

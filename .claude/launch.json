@@ -1,0 +1,9 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "star-neighbors", "runtimeExecutable": "python3",
+      "runtimeArgs": ["scripts/serve.py", "8777"], "port": 8777 },
+    { "name": "star-neighbors-alt", "runtimeExecutable": "python3",
+      "runtimeArgs": ["scripts/serve.py", "8778"], "port": 8778 }
+  ]
+}

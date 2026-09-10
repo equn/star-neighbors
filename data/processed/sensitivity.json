@@ -1,0 +1,189 @@
+{
+  "note": "largest single-variant shift in the integrated closest approach; an envelope over hand-chosen model perturbations, not a posterior",
+  "dt_myr": 0.005,
+  "n_variants": 21,
+  "variants": [
+    {
+      "variant": "disc mass -15%",
+      "median_shift_pc": 0.005838,
+      "p99_shift_pc": 0.5204,
+      "median_shift_within_2pc": 0.007875,
+      "max_shift_within_2pc": 0.579439
+    },
+    {
+      "variant": "disc mass +15%",
+      "median_shift_pc": 0.005841,
+      "p99_shift_pc": 0.514521,
+      "median_shift_within_2pc": 0.007977,
+      "max_shift_within_2pc": 0.857756
+    },
+    {
+      "variant": "disc scale length -0.5 kpc",
+      "median_shift_pc": 0.003753,
+      "p99_shift_pc": 0.331416,
+      "median_shift_within_2pc": 0.00457,
+      "max_shift_within_2pc": 0.454033
+    },
+    {
+      "variant": "disc scale length +0.5 kpc",
+      "median_shift_pc": 0.003001,
+      "p99_shift_pc": 0.264015,
+      "median_shift_within_2pc": 0.003547,
+      "max_shift_within_2pc": 0.358326
+    },
+    {
+      "variant": "disc scale height 0.20 kpc",
+      "median_shift_pc": 0.011159,
+      "p99_shift_pc": 0.925672,
+      "median_shift_within_2pc": 0.013491,
+      "max_shift_within_2pc": 1.366145
+    },
+    {
+      "variant": "disc scale height 0.40 kpc",
+      "median_shift_pc": 0.008677,
+      "p99_shift_pc": 0.828282,
+      "median_shift_within_2pc": 0.009378,
+      "max_shift_within_2pc": 0.931607
+    },
+    {
+      "variant": "halo mass -20%",
+      "median_shift_pc": 0.001081,
+      "p99_shift_pc": 0.101483,
+      "median_shift_within_2pc": 0.001429,
+      "max_shift_within_2pc": 0.131697
+    },
+    {
+      "variant": "halo mass +20%",
+      "median_shift_pc": 0.001078,
+      "p99_shift_pc": 0.10144,
+      "median_shift_within_2pc": 0.001463,
+      "max_shift_within_2pc": 0.142597
+    },
+    {
+      "variant": "halo scale radius -20%",
+      "median_shift_pc": 0.002401,
+      "p99_shift_pc": 0.244967,
+      "median_shift_within_2pc": 0.003468,
+      "max_shift_within_2pc": 0.344937
+    },
+    {
+      "variant": "bulge mass -30%",
+      "median_shift_pc": 0.000258,
+      "p99_shift_pc": 0.031887,
+      "median_shift_within_2pc": 0.000388,
+      "max_shift_within_2pc": 0.036074
+    },
+    {
+      "variant": "bulge mass +30%",
+      "median_shift_pc": 0.000258,
+      "p99_shift_pc": 0.031917,
+      "median_shift_within_2pc": 0.000388,
+      "max_shift_within_2pc": 0.036952
+    },
+    {
+      "variant": "R0 8.091 kpc",
+      "median_shift_pc": 0.000417,
+      "p99_shift_pc": 0.035382,
+      "median_shift_within_2pc": 0.000596,
+      "max_shift_within_2pc": 0.056167
+    },
+    {
+      "variant": "R0 8.153 kpc",
+      "median_shift_pc": 0.000412,
+      "p99_shift_pc": 0.034971,
+      "median_shift_within_2pc": 0.000588,
+      "max_shift_within_2pc": 0.054447
+    },
+    {
+      "variant": "z_sun 17.8 pc",
+      "median_shift_pc": 0.00011,
+      "p99_shift_pc": 0.019414,
+      "median_shift_within_2pc": 0.000187,
+      "max_shift_within_2pc": 0.024346
+    },
+    {
+      "variant": "z_sun 23.8 pc",
+      "median_shift_pc": 0.000112,
+      "p99_shift_pc": 0.01952,
+      "median_shift_within_2pc": 0.000187,
+      "max_shift_within_2pc": 0.025323
+    },
+    {
+      "variant": "Vc 224 km/s",
+      "median_shift_pc": 7e-06,
+      "p99_shift_pc": 0.002703,
+      "median_shift_within_2pc": 1e-05,
+      "max_shift_within_2pc": 0.005072
+    },
+    {
+      "variant": "Vc 234 km/s",
+      "median_shift_pc": 7e-06,
+      "p99_shift_pc": 0.0027,
+      "median_shift_within_2pc": 1e-05,
+      "max_shift_within_2pc": 0.00506
+    },
+    {
+      "variant": "Vc 231.5 (the potential's own)",
+      "median_shift_pc": 3e-06,
+      "p99_shift_pc": 0.001359,
+      "median_shift_within_2pc": 5e-06,
+      "max_shift_within_2pc": 0.002548
+    },
+    {
+      "variant": "U_sun +1 km/s",
+      "median_shift_pc": 6e-06,
+      "p99_shift_pc": 0.001396,
+      "median_shift_within_2pc": 7e-06,
+      "max_shift_within_2pc": 0.002252
+    },
+    {
+      "variant": "V_pec +1 km/s",
+      "median_shift_pc": 1e-06,
+      "p99_shift_pc": 0.00054,
+      "median_shift_within_2pc": 2e-06,
+      "max_shift_within_2pc": 0.001013
+    },
+    {
+      "variant": "W_sun +1 km/s",
+      "median_shift_pc": 1.5e-05,
+      "p99_shift_pc": 0.007318,
+      "median_shift_within_2pc": 2.6e-05,
+      "max_shift_within_2pc": 0.010358
+    },
+    {
+      "variant": "parallax zero-point Z = -0.017 mas",
+      "median_shift_pc": 0.028835,
+      "p99_shift_pc": 1.230951,
+      "median_shift_within_2pc": 0.004365,
+      "max_shift_within_2pc": 0.056605
+    },
+    {
+      "variant": "parallax zero-point Z = -0.030 mas",
+      "median_shift_pc": 0.050805,
+      "p99_shift_pc": 2.052405,
+      "median_shift_within_2pc": 0.00769,
+      "max_shift_within_2pc": 0.097793
+    },
+    {
+      "variant": "parallax zero-point Z = -0.050 mas",
+      "median_shift_pc": 0.084378,
+      "p99_shift_pc": 3.222266,
+      "median_shift_within_2pc": 0.012786,
+      "max_shift_within_2pc": 0.157681
+    },
+    {
+      "variant": "parallax zero-point Z = +0.010 mas",
+      "median_shift_pc": 0.017029,
+      "p99_shift_pc": 0.768989,
+      "median_shift_within_2pc": 0.002576,
+      "max_shift_within_2pc": 0.034776
+    }
+  ],
+  "n_within_5pc": 1684,
+  "n_zeropoint_dominated": 15,
+  "median_zeropoint_shift_within_5pc_pc": 0.0271,
+  "n_model_dominated": 165,
+  "median_shift_within_5pc_pc": 0.01759,
+  "median_shift_near_25pc_pc": 8e-05,
+  "median_shift_beyond_100pc_pc": 0.08195
+}

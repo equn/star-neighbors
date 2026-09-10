@@ -1,0 +1,996 @@
+{
+  "status": "pass",
+  "n_checks": 20,
+  "n_failed": 0,
+  "checks": [
+    {
+      "check": "every required column present and populated",
+      "passed": true,
+      "detail": "21 required columns present on all 26567 rows"
+    },
+    {
+      "check": "uncertainty draws were integrated, not straight-line",
+      "passed": true,
+      "detail": "all 26567 rows carry the integrated uncertainty model"
+    },
+    {
+      "check": "all distances and epochs finite",
+      "passed": true,
+      "detail": "all distances and epochs finite across 26567 rows"
+    },
+    {
+      "check": "Monte Carlo percentiles correctly ordered",
+      "passed": true,
+      "detail": "16th <= 50th <= 84th on distance and epoch everywhere"
+    },
+    {
+      "check": "censor flags agree with the censored fraction",
+      "passed": true,
+      "detail": "fractions in [0,1]; 990 censored stars all reach the +/-5.0 Myr edge (6 straddle both edges)"
+    },
+    {
+      "check": "Galaxy-model sensitivity recorded for every star",
+      "passed": true,
+      "detail": "present and non-negative on all 26567 rows; of 1684 stars within 5 pc, 165 move further under the Galaxy-model variants and 15 under the parallax zero-point than under measurement resampling"
+    },
+    {
+      "check": "Gaia rows carry their astrometric correlations",
+      "passed": true,
+      "detail": "26409 of 26409 Gaia rows (100.0%), including 7031 of 7031 within 30 pc"
+    },
+    {
+      "check": "no object appears under two identities",
+      "passed": true,
+      "detail": "source_id, HIP, SIMBAD id and display name each unique"
+    },
+    {
+      "check": "published ranking follows the shipped column",
+      "passed": true,
+      "detail": "closest ahead Gliese 710 at 0.0520 pc; closest behind 2MASS J06105543-4246035 at 0.2099 pc"
+    },
+    {
+      "check": "encounter rate agrees with the published measurement",
+      "passed": true,
+      "detail": "20.69 +/- 0.89 (stat) +/- 2.42 (sys) per Myr within 1 pc, vs published 19.7 +/- 2.2 \u2014 0.29 sigma"
+    },
+    {
+      "check": "Proxima Centauri present-day distance within 1% of 1.302 pc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Gliese 710 closest approach under 0.1 pc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Gliese 710 encounter between +1.2 and +1.4 Myr",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Scholz's star passed within 0.4 pc in the past",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Alpha Cen A and B agree to better than 0.02 pc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Alpha Cen A and B share the published system parallax",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Alpha Cen A and B share one radial velocity",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Barnard's Star closest approach within 5% of 1.155 pc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "HD 7977 is a sub-parsec past approach near -2.76 Myr",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Gliese 710 agrees with the published 0.167 ly within 10%",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "reference_comparison": [
+    {
+      "star": "Gliese 445",
+      "ref_now_ly": 17.6,
+      "our_now_ly": 17.137,
+      "ref_dmin_ly": 3.45,
+      "our_dmin_ly": 3.34,
+      "ref_t_kyr": 45.0,
+      "our_t_kyr": 44.32
+    },
+    {
+      "star": "Ross 128",
+      "ref_now_ly": 10.9,
+      "our_now_ly": 11.007,
+      "ref_dmin_ly": 6.233,
+      "our_dmin_ly": 6.387,
+      "ref_t_kyr": 71.0,
+      "our_t_kyr": 71.39
+    },
+    {
+      "star": "Ross 248",
+      "ref_now_ly": 10.3,
+      "our_now_ly": 10.306,
+      "ref_dmin_ly": 3.024,
+      "our_dmin_ly": 3.045,
+      "ref_t_kyr": 36.0,
+      "our_t_kyr": 36.48
+    },
+    {
+      "star": "Ross 154",
+      "ref_now_ly": 9.7,
+      "our_now_ly": 9.706,
+      "ref_dmin_ly": 6.39,
+      "our_dmin_ly": 6.277,
+      "ref_t_kyr": 157.0,
+      "our_t_kyr": 152.29
+    },
+    {
+      "star": "Sirius",
+      "ref_now_ly": 8.6,
+      "our_now_ly": 8.601,
+      "ref_dmin_ly": 7.86,
+      "our_dmin_ly": 8.171,
+      "ref_t_kyr": 64.0,
+      "our_t_kyr": 45.66
+    },
+    {
+      "star": "Lalande 21185",
+      "ref_now_ly": 8.3,
+      "our_now_ly": 8.304,
+      "ref_dmin_ly": 4.65,
+      "our_dmin_ly": 4.681,
+      "ref_t_kyr": 20.5,
+      "our_t_kyr": 19.96
+    },
+    {
+      "star": "Wolf 359",
+      "ref_now_ly": 7.78,
+      "our_now_ly": 7.856,
+      "ref_dmin_ly": 7.35,
+      "our_dmin_ly": 7.383,
+      "ref_t_kyr": -13.85,
+      "our_t_kyr": -14.04
+    },
+    {
+      "star": "Barnard's Star",
+      "ref_now_ly": 5.98,
+      "our_now_ly": 5.963,
+      "ref_dmin_ly": 3.74,
+      "our_dmin_ly": 3.768,
+      "ref_t_kyr": 9.8,
+      "our_t_kyr": 9.72
+    },
+    {
+      "star": "Alpha Centauri A",
+      "ref_now_ly": 4.36,
+      "our_now_ly": 4.344,
+      "ref_dmin_ly": 2.97,
+      "our_dmin_ly": 3.146,
+      "ref_t_kyr": 28.4,
+      "our_t_kyr": 27.77
+    },
+    {
+      "star": "Proxima Centauri",
+      "ref_now_ly": 4.24,
+      "our_now_ly": 4.246,
+      "ref_dmin_ly": 2.9,
+      "our_dmin_ly": 3.123,
+      "ref_t_kyr": 27.4,
+      "our_t_kyr": 26.63
+    }
+  ],
+  "monte_carlo": [
+    {
+      "star": "Proxima Centauri",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.9575,
+      "dmin_pc_lo": 0.9539,
+      "dmin_pc_hi": 0.9611,
+      "tmin_kyr_median": 26.63,
+      "tmin_kyr_lo": 26.62,
+      "tmin_kyr_hi": 26.65
+    },
+    {
+      "star": "Alpha Centauri B",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.9643,
+      "dmin_pc_lo": 0.943,
+      "dmin_pc_hi": 0.9808,
+      "tmin_kyr_median": 27.81,
+      "tmin_kyr_lo": 27.65,
+      "tmin_kyr_hi": 27.96
+    },
+    {
+      "star": "Alpha Centauri A",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.9641,
+      "dmin_pc_lo": 0.9476,
+      "dmin_pc_hi": 0.9825,
+      "tmin_kyr_median": 27.76,
+      "tmin_kyr_lo": 27.69,
+      "tmin_kyr_hi": 27.81
+    },
+    {
+      "star": "Barnard's Star",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.1553,
+      "dmin_pc_lo": 1.1545,
+      "dmin_pc_hi": 1.1561,
+      "tmin_kyr_median": 9.72,
+      "tmin_kyr_lo": 9.72,
+      "tmin_kyr_hi": 9.72
+    },
+    {
+      "star": "Wolf 359",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.2637,
+      "dmin_pc_lo": 2.2624,
+      "dmin_pc_hi": 2.2649,
+      "tmin_kyr_median": -14.05,
+      "tmin_kyr_lo": -14.1,
+      "tmin_kyr_hi": -14.0
+    },
+    {
+      "star": "Lalande 21185",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.4352,
+      "dmin_pc_lo": 1.4336,
+      "dmin_pc_hi": 1.4365,
+      "tmin_kyr_median": 19.96,
+      "tmin_kyr_lo": 19.95,
+      "tmin_kyr_hi": 19.97
+    },
+    {
+      "star": "Sirius",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.5052,
+      "dmin_pc_lo": 2.4846,
+      "dmin_pc_hi": 2.5234,
+      "tmin_kyr_median": 45.53,
+      "tmin_kyr_lo": 42.98,
+      "tmin_kyr_hi": 48.01
+    },
+    {
+      "star": "Ross 154",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.919,
+      "dmin_pc_lo": 1.8667,
+      "dmin_pc_hi": 1.9754,
+      "tmin_kyr_median": 152.16,
+      "tmin_kyr_lo": 150.81,
+      "tmin_kyr_hi": 153.27
+    },
+    {
+      "star": "Ross 248",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.9336,
+      "dmin_pc_lo": 0.9315,
+      "dmin_pc_hi": 0.9353,
+      "tmin_kyr_median": 36.49,
+      "tmin_kyr_lo": 36.42,
+      "tmin_kyr_hi": 36.55
+    },
+    {
+      "star": "Epsilon Eridani",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.1657,
+      "dmin_pc_lo": 2.1574,
+      "dmin_pc_hi": 2.1725,
+      "tmin_kyr_median": -105.3,
+      "tmin_kyr_lo": -105.36,
+      "tmin_kyr_hi": -105.23
+    },
+    {
+      "star": "Lacaille 9352",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.288,
+      "dmin_pc_lo": 3.2878,
+      "dmin_pc_hi": 3.2883,
+      "tmin_kyr_median": 0.0,
+      "tmin_kyr_lo": 0.0,
+      "tmin_kyr_hi": 0.0
+    },
+    {
+      "star": "Ross 128",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.9578,
+      "dmin_pc_lo": 1.9536,
+      "dmin_pc_hi": 1.9625,
+      "tmin_kyr_median": 71.38,
+      "tmin_kyr_lo": 71.3,
+      "tmin_kyr_hi": 71.46
+    },
+    {
+      "star": "61 Cygni B",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.7937,
+      "dmin_pc_lo": 2.7918,
+      "dmin_pc_hi": 2.7956,
+      "tmin_kyr_median": 19.14,
+      "tmin_kyr_lo": 19.13,
+      "tmin_kyr_hi": 19.15
+    },
+    {
+      "star": "61 Cygni A",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.7925,
+      "dmin_pc_lo": 2.7906,
+      "dmin_pc_hi": 2.7945,
+      "tmin_kyr_median": 18.77,
+      "tmin_kyr_lo": 18.76,
+      "tmin_kyr_hi": 18.78
+    },
+    {
+      "star": "Procyon",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.4365,
+      "dmin_pc_lo": 3.4201,
+      "dmin_pc_hi": 3.4497,
+      "tmin_kyr_median": 33.51,
+      "tmin_kyr_lo": 32.92,
+      "tmin_kyr_hi": 34.18
+    },
+    {
+      "star": "Struve 2398 A",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.5209,
+      "dmin_pc_lo": 3.5204,
+      "dmin_pc_hi": 3.5214,
+      "tmin_kyr_median": 3.3,
+      "tmin_kyr_lo": 2.98,
+      "tmin_kyr_hi": 3.6
+    },
+    {
+      "star": "Struve 2398 B",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.5231,
+      "dmin_pc_lo": 3.5227,
+      "dmin_pc_hi": 3.5235,
+      "tmin_kyr_median": 0.0,
+      "tmin_kyr_lo": 0.0,
+      "tmin_kyr_hi": 0.0
+    },
+    {
+      "star": "Groombridge 34 A",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.4716,
+      "dmin_pc_lo": 3.4693,
+      "dmin_pc_hi": 3.4734,
+      "tmin_kyr_median": -15.45,
+      "tmin_kyr_lo": -15.61,
+      "tmin_kyr_hi": -15.31
+    },
+    {
+      "star": "Groombridge 34 B",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.481,
+      "dmin_pc_lo": 3.479,
+      "dmin_pc_hi": 3.4832,
+      "tmin_kyr_median": -14.87,
+      "tmin_kyr_lo": -15.05,
+      "tmin_kyr_hi": -14.69
+    },
+    {
+      "star": "DX Cancri",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.2117,
+      "dmin_pc_lo": 3.2063,
+      "dmin_pc_hi": 3.2177,
+      "tmin_kyr_median": -64.38,
+      "tmin_kyr_lo": -64.72,
+      "tmin_kyr_hi": -64.0
+    },
+    {
+      "star": "Epsilon Indi",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.2572,
+      "dmin_pc_lo": 3.2546,
+      "dmin_pc_hi": 3.2597,
+      "tmin_kyr_median": 17.48,
+      "tmin_kyr_lo": 17.45,
+      "tmin_kyr_hi": 17.51
+    },
+    {
+      "star": "Tau Ceti",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.2681,
+      "dmin_pc_lo": 3.2641,
+      "dmin_pc_hi": 3.2726,
+      "tmin_kyr_median": 42.87,
+      "tmin_kyr_lo": 42.72,
+      "tmin_kyr_hi": 43.01
+    },
+    {
+      "star": "GJ 1061",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.6553,
+      "dmin_pc_lo": 3.6481,
+      "dmin_pc_hi": 3.6604,
+      "tmin_kyr_median": -24.88,
+      "tmin_kyr_lo": -29.08,
+      "tmin_kyr_hi": -21.51
+    },
+    {
+      "star": "Luyten's Star",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.6654,
+      "dmin_pc_lo": 3.6627,
+      "dmin_pc_hi": 3.6678,
+      "tmin_kyr_median": -13.4,
+      "tmin_kyr_lo": -13.53,
+      "tmin_kyr_hi": -13.27
+    },
+    {
+      "star": "Teegarden's Star",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.1745,
+      "dmin_pc_lo": 3.1026,
+      "dmin_pc_hi": 3.2422,
+      "tmin_kyr_median": -18.68,
+      "tmin_kyr_lo": -19.13,
+      "tmin_kyr_hi": -18.16
+    },
+    {
+      "star": "Kapteyn's Star",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.162,
+      "dmin_pc_lo": 2.1612,
+      "dmin_pc_hi": 2.1629,
+      "tmin_kyr_median": -10.96,
+      "tmin_kyr_lo": -10.96,
+      "tmin_kyr_hi": -10.95
+    },
+    {
+      "star": "Van Maanen's Star",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.9749,
+      "dmin_pc_lo": 0.9601,
+      "dmin_pc_hi": 0.9898,
+      "tmin_kyr_median": -15.25,
+      "tmin_kyr_lo": -15.47,
+      "tmin_kyr_hi": -15.02
+    },
+    {
+      "star": "GJ 674",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 4.5036,
+      "dmin_pc_lo": 4.4999,
+      "dmin_pc_hi": 4.5071,
+      "tmin_kyr_median": 28.53,
+      "tmin_kyr_lo": 27.52,
+      "tmin_kyr_hi": 29.54
+    },
+    {
+      "star": "GJ 876",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 4.6569,
+      "dmin_pc_lo": 4.6547,
+      "dmin_pc_hi": 4.659,
+      "tmin_kyr_median": 14.13,
+      "tmin_kyr_lo": 13.09,
+      "tmin_kyr_hi": 15.09
+    },
+    {
+      "star": "GJ 832",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 4.1456,
+      "dmin_pc_lo": 4.1307,
+      "dmin_pc_hi": 4.159,
+      "tmin_kyr_median": -115.91,
+      "tmin_kyr_lo": -116.44,
+      "tmin_kyr_hi": -115.41
+    },
+    {
+      "star": "GJ 682",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 3.125,
+      "dmin_pc_lo": 3.1078,
+      "dmin_pc_hi": 3.1404,
+      "tmin_kyr_median": 85.67,
+      "tmin_kyr_lo": 85.5,
+      "tmin_kyr_hi": 85.82
+    },
+    {
+      "star": "Altair",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 2.6553,
+      "dmin_pc_lo": 2.6209,
+      "dmin_pc_hi": 2.6845,
+      "tmin_kyr_median": 138.32,
+      "tmin_kyr_lo": 137.2,
+      "tmin_kyr_hi": 139.2
+    },
+    {
+      "star": "Gliese 445",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.0241,
+      "dmin_pc_lo": 1.0226,
+      "dmin_pc_hi": 1.0255,
+      "tmin_kyr_median": 44.33,
+      "tmin_kyr_lo": 44.27,
+      "tmin_kyr_hi": 44.39
+    },
+    {
+      "star": "Scholz's Star",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.2812,
+      "dmin_pc_lo": 0.277,
+      "dmin_pc_hi": 0.286,
+      "tmin_kyr_median": -78.88,
+      "tmin_kyr_lo": -79.5,
+      "tmin_kyr_hi": -78.24
+    },
+    {
+      "star": "LSPM J2146+3813",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.569,
+      "dmin_pc_lo": 0.5678,
+      "dmin_pc_hi": 0.5702,
+      "tmin_kyr_median": 82.58,
+      "tmin_kyr_lo": 82.4,
+      "tmin_kyr_hi": 82.74
+    },
+    {
+      "star": "Vega",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 5.2622,
+      "dmin_pc_lo": 5.1932,
+      "dmin_pc_hi": 5.3556,
+      "tmin_kyr_median": 294.4,
+      "tmin_kyr_lo": 293.79,
+      "tmin_kyr_hi": 294.84
+    },
+    {
+      "star": "Fomalhaut",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 6.9315,
+      "dmin_pc_lo": 6.8124,
+      "dmin_pc_hi": 7.0229,
+      "tmin_kyr_median": -220.3,
+      "tmin_kyr_lo": -230.43,
+      "tmin_kyr_hi": -209.99
+    },
+    {
+      "star": "EGGR 290",
+      "grade": "C",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.7711,
+      "dmin_pc_lo": 0.7516,
+      "dmin_pc_hi": 0.7933,
+      "tmin_kyr_median": 19.0,
+      "tmin_kyr_lo": 18.53,
+      "tmin_kyr_hi": 19.55
+    },
+    {
+      "star": "Groombridge 1830",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 8.737,
+      "dmin_pc_lo": 8.7349,
+      "dmin_pc_hi": 8.739,
+      "tmin_kyr_median": 8.46,
+      "tmin_kyr_lo": 8.45,
+      "tmin_kyr_hi": 8.47
+    },
+    {
+      "star": "Pollux",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 10.2965,
+      "dmin_pc_lo": 10.2663,
+      "dmin_pc_hi": 10.3304,
+      "tmin_kyr_median": -35.61,
+      "tmin_kyr_lo": -36.74,
+      "tmin_kyr_hi": -34.68
+    },
+    {
+      "star": "UPM J0812-3529",
+      "grade": "C",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.1136,
+      "dmin_pc_lo": 0.1112,
+      "dmin_pc_hi": 0.1162,
+      "tmin_kyr_median": 29.24,
+      "tmin_kyr_lo": 28.64,
+      "tmin_kyr_hi": 29.91
+    },
+    {
+      "star": "Arcturus",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 11.2518,
+      "dmin_pc_lo": 11.1843,
+      "dmin_pc_hi": 11.3284,
+      "tmin_kyr_median": 3.88,
+      "tmin_kyr_lo": 3.8,
+      "tmin_kyr_hi": 3.96
+    },
+    {
+      "star": "Gliese 208",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 1.6199,
+      "dmin_pc_lo": 1.6106,
+      "dmin_pc_hi": 1.6292,
+      "tmin_kyr_median": -512.87,
+      "tmin_kyr_lo": -515.75,
+      "tmin_kyr_hi": -509.9
+    },
+    {
+      "star": "TRAPPIST-1",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 9.5448,
+      "dmin_pc_lo": 9.5282,
+      "dmin_pc_hi": 9.559,
+      "tmin_kyr_median": 97.06,
+      "tmin_kyr_lo": 97.01,
+      "tmin_kyr_hi": 97.1
+    },
+    {
+      "star": "Capella",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 8.9054,
+      "dmin_pc_lo": 8.822,
+      "dmin_pc_hi": 9.0019,
+      "tmin_kyr_median": -237.2,
+      "tmin_kyr_lo": -237.39,
+      "tmin_kyr_hi": -237.01
+    },
+    {
+      "star": "Gliese 710",
+      "grade": "A",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.052,
+      "dmin_pc_lo": 0.0491,
+      "dmin_pc_hi": 0.0554,
+      "tmin_kyr_median": 1295.78,
+      "tmin_kyr_lo": 1272.53,
+      "tmin_kyr_hi": 1315.97
+    },
+    {
+      "star": "Aldebaran",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 6.8448,
+      "dmin_pc_lo": 6.6556,
+      "dmin_pc_hi": 7.0827,
+      "tmin_kyr_median": -326.33,
+      "tmin_kyr_lo": -330.74,
+      "tmin_kyr_hi": -322.48
+    },
+    {
+      "star": "HD 7977",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 0.0377,
+      "dmin_pc_lo": 0.0193,
+      "dmin_pc_hi": 0.0634,
+      "tmin_kyr_median": -2764.68,
+      "tmin_kyr_lo": -2789.3,
+      "tmin_kyr_hi": -2739.5
+    },
+    {
+      "star": "Beta Centauri",
+      "grade": "B",
+      "model": "integrated",
+      "censored_fraction": 0.0,
+      "dmin_pc_median": 118.4064,
+      "dmin_pc_lo": 111.4318,
+      "dmin_pc_hi": 126.1241,
+      "tmin_kyr_median": -536.81,
+      "tmin_kyr_lo": -1141.42,
+      "tmin_kyr_hi": 118.64
+    }
+  ],
+  "rankings": {
+    "basis": "grade A, boundary-limited trajectories excluded, ranked on the median of the integrated draws",
+    "closest_ahead": [
+      {
+        "star": "Gliese 710",
+        "dmin_pc": 0.052,
+        "lo_pc": 0.0491,
+        "hi_pc": 0.0554,
+        "tmin_kyr": 1295.8,
+        "dist_now_pc": 19.09,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "Gaia DR3 1132123559268892288",
+        "dmin_pc": 0.3222,
+        "lo_pc": 0.274,
+        "hi_pc": 0.3683,
+        "tmin_kyr": 2603.0,
+        "dist_now_pc": 206.7,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "LAMOST J045521.42+114441.2",
+        "dmin_pc": 0.5611,
+        "lo_pc": 0.5362,
+        "hi_pc": 0.5881,
+        "tmin_kyr": 1692.1,
+        "dist_now_pc": 107.16,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "LSPM J2146+3813",
+        "dmin_pc": 0.569,
+        "lo_pc": 0.5678,
+        "hi_pc": 0.5702,
+        "tmin_kyr": 82.6,
+        "dist_now_pc": 7.05,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "2MASS J14594591+8347085",
+        "dmin_pc": 0.6412,
+        "lo_pc": 0.5323,
+        "hi_pc": 0.8158,
+        "tmin_kyr": 4491.9,
+        "dist_now_pc": 169.56,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "Gaia DR3 6913732624445112832",
+        "dmin_pc": 0.9095,
+        "lo_pc": 0.7913,
+        "hi_pc": 1.0354,
+        "tmin_kyr": 2946.6,
+        "dist_now_pc": 315.83,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "Ross 248",
+        "dmin_pc": 0.9336,
+        "lo_pc": 0.9315,
+        "hi_pc": 0.9353,
+        "tmin_kyr": 36.5,
+        "dist_now_pc": 3.16,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "HIP 94512",
+        "dmin_pc": 0.9476,
+        "lo_pc": 0.9055,
+        "hi_pc": 0.9815,
+        "tmin_kyr": 3020.7,
+        "dist_now_pc": 102.5,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "Proxima Centauri",
+        "dmin_pc": 0.9575,
+        "lo_pc": 0.9539,
+        "hi_pc": 0.9611,
+        "tmin_kyr": 26.6,
+        "dist_now_pc": 1.3,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "Gliese 445",
+        "dmin_pc": 1.0241,
+        "lo_pc": 1.0226,
+        "hi_pc": 1.0255,
+        "tmin_kyr": 44.3,
+        "dist_now_pc": 5.25,
+        "grade": "A",
+        "censored": false
+      }
+    ],
+    "closest_behind": [
+      {
+        "star": "2MASS J06105543-4246035",
+        "dmin_pc": 0.2099,
+        "lo_pc": 0.2026,
+        "hi_pc": 0.2156,
+        "tmin_kyr": -1158.2,
+        "dist_now_pc": 97.71,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "2MASS J22415098-2759470",
+        "dmin_pc": 0.5817,
+        "lo_pc": 0.5561,
+        "hi_pc": 0.6031,
+        "tmin_kyr": -2779.1,
+        "dist_now_pc": 126.03,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "2MASS J06342938-7449471",
+        "dmin_pc": 0.6236,
+        "lo_pc": 0.6177,
+        "hi_pc": 0.6296,
+        "tmin_kyr": -896.3,
+        "dist_now_pc": 65.12,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "TYC 1662-1962-1",
+        "dmin_pc": 0.8196,
+        "lo_pc": 0.8084,
+        "hi_pc": 0.8299,
+        "tmin_kyr": -1537.6,
+        "dist_now_pc": 87.85,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "SAO 172059",
+        "dmin_pc": 0.8223,
+        "lo_pc": 0.8141,
+        "hi_pc": 0.8309,
+        "tmin_kyr": -1661.8,
+        "dist_now_pc": 112.98,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "UPM J1121-5549",
+        "dmin_pc": 0.8594,
+        "lo_pc": 0.8554,
+        "hi_pc": 0.864,
+        "tmin_kyr": -284.5,
+        "dist_now_pc": 22.23,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "TYC 9327-264-1",
+        "dmin_pc": 0.866,
+        "lo_pc": 0.8537,
+        "hi_pc": 0.8808,
+        "tmin_kyr": -1904.1,
+        "dist_now_pc": 101.98,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "2MASS J06215471-4725313",
+        "dmin_pc": 0.8882,
+        "lo_pc": 0.857,
+        "hi_pc": 0.9293,
+        "tmin_kyr": -306.8,
+        "dist_now_pc": 24.83,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "2MASS J06254274-2408350",
+        "dmin_pc": 0.9172,
+        "lo_pc": 0.9028,
+        "hi_pc": 0.931,
+        "tmin_kyr": -1874.2,
+        "dist_now_pc": 164.0,
+        "grade": "A",
+        "censored": false
+      },
+      {
+        "star": "HIP 90112",
+        "dmin_pc": 0.9189,
+        "lo_pc": 0.9026,
+        "hi_pc": 0.9338,
+        "tmin_kyr": -2058.8,
+        "dist_now_pc": 56.59,
+        "grade": "A",
+        "censored": false
+      }
+    ]
+  }
+}

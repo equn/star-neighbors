@@ -1,0 +1,23 @@
+# Local snapshots taken before destructive edits. Never published: they are
+# duplicate copies of files that are already tracked here.
+backup/
+
+# Cached upstream query results (Gaia, SIMBAD, VizieR) and the large
+# intermediates built from them. Regenerable by running the pipeline in order,
+# and redistributing third-party catalog dumps carries their terms with it.
+data/raw/
+data/processed/merged.csv
+data/processed/named.csv
+data/processed/orbits.csv
+data/processed/cheb_coeffs.npy
+data/processed/simbad_cache.json
+
+# Third-party comparison charts saved for reference. Not ours to redistribute.
+reference/
+
+# Personal editor state
+.claude/settings.local.json
+
+.DS_Store
+__pycache__/
+*.pyc

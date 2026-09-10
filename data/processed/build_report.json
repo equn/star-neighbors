@@ -1,0 +1,72 @@
+{
+  "status": "pass",
+  "n_stars_catalog": 26567,
+  "n_stars_shipped": 12218,
+  "checks": [
+    {
+      "check": "orbits.csv matches the integration metadata",
+      "passed": true,
+      "detail": "26567 rows vs n_stars=26567"
+    },
+    {
+      "check": "coefficient array matches the catalog",
+      "passed": true,
+      "detail": "(26567, 3, 13) vs 26567 rows"
+    },
+    {
+      "check": "public CSV covers the whole catalog",
+      "passed": true,
+      "detail": "26567 rows vs 26567"
+    },
+    {
+      "check": "public CSV sorted by the integrated median",
+      "passed": true,
+      "detail": "ascending closest approach"
+    },
+    {
+      "check": "every stars.json array has the shipped length",
+      "passed": true,
+      "detail": "12218 stars; mismatched: none"
+    },
+    {
+      "check": "cheb.bin is exactly the declared size",
+      "passed": true,
+      "detail": "1906008 bytes vs 1906008 expected"
+    },
+    {
+      "check": "metadata star count matches the bundle",
+      "passed": true,
+      "detail": "meta 12218 vs bundle 12218"
+    },
+    {
+      "check": "catalog count in metadata matches orbits.csv",
+      "passed": true,
+      "detail": "26567 vs 26567"
+    },
+    {
+      "check": "every shipped star exists in the catalog",
+      "passed": true,
+      "detail": "all resolved"
+    },
+    {
+      "check": "shipped closest approaches match the catalog",
+      "passed": true,
+      "detail": "agree to the exported rounding"
+    },
+    {
+      "check": "censored flag bit agrees with the censored fraction",
+      "passed": true,
+      "detail": "135 flagged"
+    },
+    {
+      "check": "shipped encounter rate matches the stage that computed it",
+      "passed": true,
+      "detail": "20.69 +/- 0.89 per Myr, 0.29 sigma from published"
+    },
+    {
+      "check": "embedded validation reports a pass",
+      "passed": true,
+      "detail": "status=pass, 0 of 20 failed"
+    }
+  ]
+}

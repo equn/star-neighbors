@@ -1,0 +1,5 @@
+# The pipeline is deliberately stdlib-only apart from these two.
+# Pinned to what the shipped data was built with; newer versions are very
+# likely fine, the pin is for reproducibility not compatibility.
+numpy==2.4.4
+scipy==1.17.1

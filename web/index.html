@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- The dev server sends these as real headers, but this page is deployed by
+     copying it onto a host whose config this repository does not own, so the
+     policy has to travel with the document or it does not exist in production.
+     `frame-ancestors` and `X-Content-Type-Options` cannot be set from a meta
+     tag; those two still need the server, and README says so. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>The Sun's Changing Neighborhood — 5 Million Years of Stellar Encounters</title>
+<style>
+  :root {
+    --bg: #05070d;
+    --panel: rgba(13, 18, 30, 0.86);
+    --panel-solid: #0d121e;
+    --line: rgba(140, 170, 220, 0.16);
+    --text: #dce6f5;
+    --dim: #8595ad;
+    --dimmer: #8290a8;   /* 4.6:1 on the panel; was 3.3:1 */
+    --accent: #6fc3ff;
+    --warn: #ffb454;
+    --bad: #ff6b6b;
+    --good: #7ee787;
+    /* Vertical space the orientation panel occupies on the right, so #info can
+       be capped to what is left and the two cannot collide on a short window.
+       fitInfoCard() in app.js replaces this with the panel's measured extent
+       once it has laid out; this value is the conservative pre-script guess. */
+    --navblock: 485px;
+    --plot-l: 46px;   /* must match chartGeom() in app.js */
+    --plot-r: 14px;
+    --thumb: 14px;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--sans);
+    font-size: 13px; -webkit-font-smoothing: antialiased;
+  }
+  #stage { position: fixed; inset: 0; }
+  canvas#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  canvas#overlay {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: block; pointer-events: none;
+  }
+
+  .panel {
+    position: absolute; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  /* ---- title ---- */
+  #title { top: 14px; left: 14px; padding: 12px 16px; max-width: 330px; }
+  #title h1 { font-size: 15px; font-weight: 600; letter-spacing: .2px; }
+  #title p { color: var(--dim); font-size: 11.5px; margin-top: 4px; line-height: 1.45; }
+  #title .stat { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+  /* ---- left rail ---- */
+  #rail {
+    top: 162px; left: 14px; width: 330px; bottom: 254px;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #search {
+    width: 100%; background: rgba(0,0,0,.35); border: 0; border-bottom: 1px solid var(--line);
+    color: var(--text); padding: 10px 14px; font-family: var(--sans); font-size: 12.5px;
+    outline: none; border-radius: 10px 10px 0 0;
+  }
+  #search::placeholder { color: var(--dimmer); }
+  .tabs { display: flex; border-bottom: 1px solid var(--line); }
+  .tab {
+    background: none; border: 0; font-family: inherit; flex: 1; padding: 8px 4px; text-align: center; font-size: 11px; color: var(--dim);
+    cursor: pointer; border-bottom: 2px solid transparent; user-select: none;
+    letter-spacing: .3px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+  #list { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+  .row {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline;
+    padding: 7px 14px; cursor: pointer; border-bottom: 1px solid rgba(140,170,220,.06);
+  }
+  .row:hover { background: rgba(111,195,255,.08); }
+  .row.sel { background: rgba(111,195,255,.16); }
+  .row .nm { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .row .vl { font-family: var(--mono); font-size: 11px; color: var(--dim); white-space: nowrap; }
+  .row .sub { grid-column: 1/-1; font-size: 10.5px; color: var(--dimmer); font-family: var(--mono); }
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  /* ---- filters ---- */
+  #filters { padding: 10px 14px; border-top: 1px solid var(--line); font-size: 11px; color: var(--dim); }
+  #filters label { display: flex; align-items: center; gap: 7px; padding: 3px 0; cursor: pointer; }
+  #filters input[type=checkbox] { accent-color: var(--accent); }
+  #filters .rng { display: flex; align-items: center; gap: 8px; padding-top: 6px; }
+  #filters .rng label { display: inline; flex: none; }
+  #fradv, #funcv { font-family: var(--mono); min-width: 46px; text-align: right; }
+  #filters input[type=range] { flex: 1; accent-color: var(--accent); }
+
+  /* ---- info card ---- */
+  /* #info and #nav share the right-hand column but are positioned from opposite
+     edges, so on a 720px-tall laptop a long card ran into the top of the
+     orientation panel. --navblock reserves the space #nav occupies (its bottom
+     offset + its height + a gap); the card scrolls rather than overlapping. */
+  #info {
+    top: 14px; right: 14px; width: 300px; padding: 14px 16px; display: none;
+    max-height: calc(100vh - var(--navblock)); overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+    overscroll-behavior: contain;
+  }
+  #info h2 { font-size: 14px; font-weight: 600; margin-bottom: 2px; padding-right: 34px; }
+  /* In normal flow, not absolutely placed: pinned to the top-right it landed on
+     the first value whenever the star's name fitted on one line. */
+  #i-focus { width: auto; margin: 2px 0 10px; }
+  #info .sp { color: var(--dim); font-size: 11px; font-family: var(--mono); margin-bottom: 4px; }
+  #info dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 11.5px; }
+  #info dt { color: var(--dim); }
+  #info dd { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+  #info .flags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip {
+    font-size: 10px; padding: 2px 7px; border-radius: 20px;
+    border: 1px solid var(--line); color: var(--dim);
+  }
+  .chip.warn { color: var(--warn); border-color: rgba(255,180,84,.4); }
+  .chip.bad { color: var(--bad); border-color: rgba(255,107,107,.4); }
+  .chip.good { color: var(--good); border-color: rgba(126,231,135,.4); }
+  #info .close { position: absolute; top: 10px; right: 12px; color: var(--dimmer); cursor: pointer; font-size: 15px; }
+  #info .close:hover { color: var(--text); }
+
+  /* ---- bottom dock ---- */
+  #dock { left: 14px; right: 14px; bottom: 14px; height: 228px; display: flex; flex-direction: column; }
+  #transport {
+    display: flex; align-items: center; gap: 14px; padding: 9px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  button.ctl {
+    background: rgba(111,195,255,.12); border: 1px solid rgba(111,195,255,.3);
+    color: var(--accent); border-radius: 6px; padding: 5px 12px; cursor: pointer;
+    font-family: var(--sans); font-size: 12px;
+  }
+  button.ctl:hover { background: rgba(111,195,255,.22); }
+  button.ctl.play { min-width: 40px; font-size: 13px; line-height: 1; padding: 5px 10px; }
+  button.ctl.play.on {
+    background: var(--accent); border-color: var(--accent); color: #06203a; font-weight: 600;
+  }
+  #tnow {
+    font-family: var(--mono); font-size: 13px; min-width: 152px;
+    font-variant-numeric: tabular-nums; color: var(--accent);
+  }
+  /* The scrub track is inset to exactly the chart's plot area and the thumb is
+     pulled out by half its own width, so the thumb sits directly above the
+     cursor line in the chart below rather than on a track of its own. */
+  #scrubrow { padding: 0 var(--plot-r) 8px var(--plot-l); }
+  #scrub {
+    display: block; width: calc(100% + var(--thumb));
+    margin: 0 calc(var(--thumb) / -2); cursor: ew-resize;
+    -webkit-appearance: none; appearance: none; background: transparent;
+  }
+  #scrub::-webkit-slider-runnable-track {
+    height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, rgba(140,170,220,.18), rgba(140,170,220,.28));
+  }
+  #scrub::-moz-range-track {
+    height: 3px; border-radius: 2px; background: rgba(140,170,220,.22);
+  }
+  #scrub::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: var(--thumb); height: var(--thumb); border-radius: 50%; margin-top: -5.5px;
+    background: var(--accent); border: 2px solid #0d121e;
+    box-shadow: 0 0 0 1px rgba(111,195,255,.5), 0 0 10px rgba(111,195,255,.5);
+  }
+  #scrub::-moz-range-thumb {
+    width: var(--thumb); height: var(--thumb); border-radius: 50%;
+    background: var(--accent); border: 2px solid #0d121e;
+  }
+  #transport .hint { flex: 1; color: var(--dimmer); font-size: 11px; }
+  #speed { background: rgba(0,0,0,.3); color: var(--text); border: 1px solid var(--line);
+           border-radius: 5px; padding: 4px 6px; font-size: 11px; }
+  #chartwrap { flex: 1; position: relative; }
+  canvas#chart { position: absolute; inset: 0; width: 100%; height: 100%; cursor: default; }
+  /* The time axis is symmetric-log, which nobody should have to infer from the
+     tick spacing. Lives in the transport bar rather than over the plot, where
+     it sat on top of the trajectories it was explaining. */
+  #axisnote { display: block; font-size: 10px; line-height: 1.35; opacity: .82; }
+  #axisnote b { color: var(--text); font-weight: 600; }
+
+  /* ---- navigation ---- */
+  #nav {
+    position: absolute; right: 14px; bottom: 254px; width: 226px; padding: 10px 12px;
+  }
+  .navtop { display: flex; gap: 10px; align-items: flex-start; }
+  #gizmo { width: 84px; height: 84px; flex: none; }
+  .navbtns { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  button.ctl.sm { padding: 3px 8px; font-size: 11px; width: 100%; }
+  button.ctl.sm.on {
+    background: var(--accent); border-color: var(--accent); color: #06203a; font-weight: 600;
+  }
+  /* From Earth: the distance filter and the co-moving spread do not apply when
+     brightness, not proximity, decides what you can see. */
+  body.skymode #filters .skyhide, body.skymode .skyhide { display: none; }
+  button.lnk {
+    background: none; border: 0; padding: 0; font: inherit; font-weight: 700;
+    color: var(--accent); cursor: pointer; text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  button.lnk:hover { color: #fff; }
+  #skybar {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(var(--dockh, 110px) + 10px); z-index: 39;
+    background: rgba(9,14,26,.86); border: 1px solid rgba(111,195,255,.28);
+    border-radius: 999px; padding: 6px 14px; pointer-events: auto;
+    font-family: var(--mono); font-size: 11.5px; color: var(--dim);
+    white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #skybar[hidden] { display: none; }
+
+  /* --- narrated tour ----------------------------------------------------- */
+  #tourbar {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(var(--dockh, 118px) + 14px); z-index: 60;
+    width: min(760px, calc(100vw - 32px));
+    background: rgba(6,10,20,.92); border: 1px solid rgba(111,195,255,.3);
+    border-radius: 12px; padding: 14px 18px 10px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.6);
+  }
+  #tourbar[hidden] { display: none; }
+  #tourtext {
+    margin: 0 0 10px; font-size: 15.5px; line-height: 1.5; color: #e8f0fb;
+    text-wrap: pretty;
+  }
+  .tourctl { display: flex; align-items: center; gap: 7px; }
+  /* button.ctl.sm is full-width for the stacked nav column; in this row it
+     must not be. */
+  .tourctl button.ctl.sm { width: auto; flex: none; }
+  #tourstep {
+    font-family: var(--mono); font-size: 11px; color: var(--dim);
+    margin: 0 auto 0 6px; font-variant-numeric: tabular-nums;
+  }
+  #tourBtn .dim { color: var(--dim); font-size: 10px; }
+  /* Panels stay usable but recede: the tour is driving, and a fully lit
+     interface competes with the narration for attention. */
+  body.touring #rail, body.touring #nav { opacity: .45; transition: opacity .5s ease; }
+  /* Everything outside the caption is made inert while the tour is driving
+     (see setTourInert). Inert is invisible on its own, so the controls that
+     stay on screen have to look unavailable rather than silently ignore a
+     click. The epoch readout and the scrubber keep full contrast: watching
+     time move is half of what the tour is showing. */
+  body.touring #transport button,
+  body.touring #transport select,
+  body.touring #transport .hint,
+  body.touring #title button { opacity: .3; transition: opacity .5s ease; }
+  /* Two glyphs do not fit the 30px square the single-arrow buttons use. */
+  .tourctl button.ctl.sm.sq.wide { width: 44px; letter-spacing: -1px; }
+  /* The chart is a second view of the same story, and during the tour it does
+     two unhelpful things: it competes with the narration for attention, and it
+     makes the dock tall enough that the caption lands on top of whatever the
+     camera has just centered. The transport and the scrubber stay, so time is
+     still visibly moving. */
+  body.touring #chart { display: none; }
+  /* The detail card is a wall of numbers next to the one object the narration
+     is asking you to look at, and on any screen it covers a third of the view.
+     The tour names what matters out loud; the card is in the way. */
+  body.touring #info { display: none !important; }
+  /* #dock is a fixed 228px so the chart has a stable plot area; with the chart
+     gone it has to collapse to its remaining contents or it leaves an empty
+     panel across the bottom third of the screen. */
+  body.touring #dock { height: auto; }
+  @media (max-width: 820px) {
+    #tourbar { bottom: calc(var(--dockh, 118px) + 8px); padding: 11px 13px 8px; }
+    #tourtext { font-size: 14px; }
+  }
+  button.ctl.sm.sq { width: 30px; min-height: 30px; padding: 3px 0; text-align: center; flex: none; }
+  .zoomrow { display: flex; align-items: center; gap: 7px; margin-top: 9px; }
+  #zoom { flex: 1; accent-color: var(--accent); cursor: ew-resize; }
+  #zlabel {
+    font-family: var(--mono); font-size: 10.5px; color: var(--dim);
+    text-align: center; margin-top: 3px;
+  }
+  #hud {
+    font-family: var(--mono); font-size: 10px; color: var(--dimmer);
+    line-height: 1.55; margin-top: 8px; padding-top: 7px;
+    border-top: 1px solid var(--line);
+  }
+  #tip {
+    position: absolute; pointer-events: none; background: var(--panel-solid);
+    border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px;
+    font-size: 11px; display: none; z-index: 10; white-space: nowrap;
+  }
+  #tip .t2 { color: var(--dim); font-family: var(--mono); font-size: 10.5px; }
+  #loading {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    background: var(--bg); z-index: 50; color: var(--dim); font-size: 12px;
+  }
+  :where(button, input, [tabindex], .row):focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+  /* ---- narrow and short screens ----
+     The desktop layout is absolutely positioned around a wide window. Rather
+     than pretend that scales, narrow screens get a different arrangement: the
+     3-D view keeps the top of the screen, the star list becomes a short
+     scrollable sheet under it, and the chart takes the bottom. The orientation
+     panel is dropped - it is an aid to a mouse-driven camera that a phone does
+     not really have. */
+  /* Desktop only: the menu, chart and filter toggles are small-screen
+     affordances. On a wide screen the filter block is always open. */
+  #menubtn, #chartbtn, #filterbtn { display: none; }
+
+  @media (max-width: 900px) {
+    /* On a phone the 3-D view was the least visible thing on screen - a strip
+       between the title and the list, which is exactly backwards. It now fills
+       the viewport and everything else is summoned over it.
+       The one exception is the transport: this app is about watching stars move
+       through time, and without a scrubber a full-screen star field is a
+       photograph. So the play controls and the time readout stay pinned. */
+    #title {
+      left: 0; right: 0; top: 0; max-width: none; padding: 8px 10px;
+      border-radius: 0; border-width: 0 0 1px; display: flex;
+      align-items: center; gap: 10px;
+    }
+    #title h1 { font-size: 13px; flex: 1; min-width: 0;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #title p, #title #aboutBtn, #title #fsBtn { display: none; }
+    /* The tour is the one control a first-time visitor most needs, so unlike
+       Methods & limits it keeps its place in the bar; only its subtitle goes. */
+    #title #tourBtn { flex: none; width: auto; padding: 6px 9px; font-size: 11px; }
+    #title #tourBtn .dim { display: none; }
+    /* Methods & limits is where this thing is honest about what it does and
+       does not know. It is not the control to drop for want of space, so on a
+       phone it moves into the sheet (placeAboutBtn in app.js) rather than
+       disappearing. */
+    #filters #aboutBtn { display: block; width: 100%; min-height: 44px; margin-top: 10px; }
+    #filters #fsBtn { display: block; width: 100%; min-height: 44px; margin: 10px 0 0; }
+    /* The filter block is ~250px once every control is a 44px target - a third
+       of a phone screen, taken from the list, which is what the sheet is FOR.
+       Collapsed by default; the list gets the room. */
+    #filterbtn {
+      display: block; width: calc(100% - 20px); margin: 0 10px 10px;
+      min-height: 44px; flex: none;
+    }
+    #filters { display: none; }
+    body.filters-open #filters { display: block; }
+    body.filters-open #filterbtn { background: var(--accent); color: #06203a; }
+    #menubtn, #chartbtn { display: inline-block; flex: none; }
+    #nav { display: none !important; }
+
+    /* Star list: an off-canvas sheet, not a squeezed panel. */
+    /* Bottom stops above the dock rather than running under it: --dockh is the
+       dock's measured height (fitMobileChrome in app.js), because it changes
+       when the chart is toggled. A fixed padding left the last filter row
+       permanently hidden behind the transport. */
+    #rail {
+      top: 45px; left: 0; right: 0; bottom: var(--dockh, 110px);
+      width: auto; max-height: none;
+      border-radius: 0; border-width: 0; z-index: 30;
+      transform: translateX(-100%); transition: transform .22s ease;
+    }
+    body.menu-open #rail { transform: translateX(0); }
+
+    /* Dock: transport only, unless the chart is asked for. */
+    /* Above the sheet, so time can still be scrubbed while browsing the list
+       and the values in it update as you go. */
+    #dock {
+      left: 0; right: 0; bottom: 0; height: auto; z-index: 40;
+      border-radius: 0; border-width: 1px 0 0;
+    }
+    #chartwrap { display: none; height: 34vh; flex: none; }
+    body.chart-open #chartwrap { display: block; }
+    body.chart-open #chartbtn { background: var(--accent); color: #06203a; }
+    body.menu-open #menubtn { background: var(--accent); color: #06203a; }
+    /* Touch targets. A 2px-padded label and a default range thumb are well
+       under the 44px minimum; the checkbox itself is scaled up rather than just
+       its hit area, so it is visibly tappable and not just secretly so. */
+    #filters { padding: 8px 12px; }
+    #filters label { padding: 0; min-height: 44px; align-items: center; }
+    #filters input[type=checkbox] { width: 22px; height: 22px; }
+    #filters .rng { padding-top: 0; min-height: 44px; }
+    #filters input[type=range] { height: 44px; }
+    #scrub { height: 44px; }
+    .tab { min-height: 44px; }
+    button.close { min-width: 44px; min-height: 44px; }
+    #info {
+      top: auto; left: 8px; right: 8px; width: auto; z-index: 25;
+      bottom: calc(var(--dockh, 110px) + 8px); max-height: 46vh; overflow-y: auto;
+    }
+    body.chart-open #info { max-height: 34vh; }
+    /* One row, or it steals height back from the view we just freed up.
+       The speed menu goes: "normal" is a fine default and it is the least
+       used control here. Everything left is a 44px target. */
+    #transport { flex-wrap: nowrap; gap: 6px; padding: 7px 8px; }
+    #speed { display: none; }
+    #tnow { min-width: 0; flex: 1; text-align: center; }
+    #transport button.ctl { padding: 8px 10px; }
+    #transport .hint { display: none; }
+    #axisnote { display: none; }   /* no spare corner on a phone-width plot */
+    #tnow { font-size: 12px; }
+    #scrubrow { padding: 0 var(--plot-r) 6px var(--plot-l); }
+    button.ctl { padding: 8px 12px; min-height: 44px; }
+    #search { padding: 13px 14px; min-height: 44px; }
+    #speed { min-height: 44px; padding: 4px 8px; }
+    button.ctl.play { min-width: 48px; }
+    .row { padding: 10px 14px; }
+    .tab { padding: 12px 4px; }
+  }
+  @media (max-height: 700px) {
+    /* two lines of note cost the plot a fifth of its height here */
+    #axisnote { display: none; }
+    #dock { height: 168px; }
+    #rail { bottom: 194px; }
+    #nav { bottom: 194px; }
+    #hud { display: none; }
+  }
+  @media (max-width: 900px) and (max-height: 700px) {
+    #info { max-height: 38vh; }
+    #chartwrap { height: 40vh; }
+  }
+
+  /* ---- methods panel ---- */
+  #aboutBtn { width: auto; margin-top: 8px; }
+  #fsBtn { width: auto; margin-top: 8px; margin-left: 6px; }
+  /* #stage is already `position: fixed; inset: 0`, so it fills a screen exactly
+     as it fills a window and needs no layout change. It does need its own
+     background: the page background belongs to <body>, which is not painted
+     behind a fullscreen element. */
+  #stage:fullscreen { background: var(--bg); }
+  #stage:-webkit-full-screen { background: var(--bg); }
+  #about {
+    top: 14px; left: 50%; transform: translateX(-50%);
+    width: min(620px, calc(100vw - 28px)); max-height: calc(100vh - 28px);
+    overflow-y: auto; padding: 18px 22px; z-index: 40;
+  }
+  #about[hidden] { display: none; }
+  #about h2 { font-size: 15px; margin-bottom: 10px; }
+  #about h3 { font-size: 12px; margin: 14px 0 4px; color: var(--accent); }
+  #about p, #about li { font-size: 12px; line-height: 1.55; color: var(--dim); }
+  #about ul { margin: 4px 0 0 18px; }
+  #about a { color: var(--accent); }
+  #about .warn { color: var(--warn); }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-thumb { background: rgba(140,170,220,.2); border-radius: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl" role="img"
+          aria-label="Three-dimensional view of stars around the Sun. The same distances
+                      and closest approaches are listed as text in the star list and
+                      detail panel."></canvas>
+  <canvas id="overlay" aria-hidden="true"></canvas>
+
+  <div id="title" class="panel">
+    <h1>The Sun's Changing Neighborhood</h1>
+    <p><span class="stat" id="nstars">…</span> stars with full 6-D astrometry, integrated
+       through the Galactic potential over <span class="stat">±5 Myr</span>.
+       Drag to orbit · scroll to zoom · click a star, click it again to clear.</p>
+    <button class="ctl sm" id="tourBtn">▶ Take the tour <span class="dim">10 min</span></button>
+    <button class="ctl sm" id="aboutBtn" aria-haspopup="dialog">Methods &amp; limits</button>
+    <button class="ctl sm" id="fsBtn" aria-pressed="false"
+            title="Fill the screen (F)">⛶ Full screen</button>
+    <button class="ctl" id="menubtn" aria-expanded="false" aria-controls="rail"
+            aria-label="Open the star list and filters">☰&nbsp;Stars</button>
+  </div>
+
+  <div id="about" class="panel" role="dialog" aria-modal="false"
+       aria-labeledby="about-h" hidden>
+    <button class="close" id="aboutClose" aria-label="Close methods panel">×</button>
+    <h2 id="about-h">How these numbers are made</h2>
+    <div id="about-body"></div>
+  </div>
+
+  <nav id="rail" class="panel" aria-label="Star list and filters">
+    <input id="search" type="search" aria-label="Search stars"
+           placeholder="Search — Proxima, Gliese 710, Ross 248…" autocomplete="off">
+    <div class="tabs" role="tablist" aria-label="Ranking">
+      <button class="tab on" role="tab" aria-selected="true" data-tab="near">Nearest now</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="future">Closest ahead</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="past">Closest behind</button>
+    </div>
+    <div id="list" role="listbox" aria-label="Stars"></div>
+    <button class="ctl" id="filterbtn" aria-expanded="false" aria-controls="filters">
+      Filters &amp; view options</button>
+    <div id="filters">
+      <label for="fq"><input type="checkbox" id="fq" checked> Hide flagged measurements</label>
+      <label for="ff"><input type="checkbox" id="ff"> Notable stars only</label>
+      <div class="rng skyhide">
+        <label for="frad">View radius</label>
+        <input type="range" id="frad" min="0" max="1" value="0.371" step="0.001"
+               aria-describedby="fradv" aria-label="View radius, logarithmic">
+        <span id="fradv">20 pc</span>
+      </div>
+      <div class="rng">
+        <label for="func" title="Hide stars whose resampled range is wide compared with the prediction">Max spread</label>
+        <input type="range" id="func" min="10" max="200" value="200" step="5" aria-describedby="funcv">
+        <span id="funcv">any</span>
+      </div>
+    </div>
+  </nav>
+
+  <aside id="info" class="panel" aria-label="Selected star details">
+    <button class="close" id="infoclose" aria-label="Close star details">×</button>
+    <h2 id="i-name"></h2>
+    <div class="sp" id="i-sp"></div>
+    <button class="ctl sm" id="i-focus" title="Fly the view to this star">⌖ Focus</button>
+    <dl id="i-dl"></dl>
+    <div class="flags" id="i-flags"></div>
+  </aside>
+
+  <div id="nav" class="panel">
+    <div class="navtop">
+      <canvas id="gizmo" role="img" aria-label="Galactic orientation indicator" title="Galactic orientation: GC = Galactic center, ROT = direction of Galactic rotation, NGP = North Galactic Pole"></canvas>
+      <div class="navbtns">
+        <button class="ctl sm" id="vLevel" title="Look along the Galactic plane, north up">Level</button>
+        <button class="ctl sm" id="vTop" title="Look down from the North Galactic Pole">Top-down</button>
+        <button class="ctl sm" id="vReset" title="Default three-quarter view">Reset</button>
+        <button class="ctl sm" id="vSky" aria-pressed="false" title="Stand at the Sun and look out: stars drawn at the brightness they would have in Earth's sky (E)">From Earth</button>
+      </div>
+    </div>
+    <div class="zoomrow">
+      <button class="ctl sm sq" id="zout" title="Zoom out">−</button>
+      <input type="range" id="zoom" min="0" max="1" step="0.001" aria-label="Zoom" aria-describedby="zlabel">
+      <button class="ctl sm sq" id="zin" title="Zoom in">+</button>
+    </div>
+    <div id="zlabel"></div>
+    <div id="hud"></div>
+  </div>
+
+  <!-- The brightest-star readout lives in the orientation panel, which narrow
+       layouts drop. This carries it there and shows only in the sky view. -->
+  <div id="skybar" hidden></div>
+
+  <!-- Narration captions. Always drawn, whether or not the voice is speaking:
+       the tour has to be complete with the sound off. -->
+  <div id="tourbar" hidden>
+    <p id="tourtext" aria-live="polite"></p>
+    <div class="tourctl">
+      <button class="ctl sm sq wide" id="tourprev" title="Previous section (←)"
+              aria-label="Previous section">◀◀</button>
+      <button class="ctl sm sq" id="tourplay" title="Pause">❚❚</button>
+      <button class="ctl sm sq wide" id="tournext" title="Next section (→)"
+              aria-label="Next section">▶▶</button>
+      <span id="tourstep"></span>
+      <button class="ctl sm" id="tourexit" title="Leave the tour (Esc)">Exit Tour</button>
+    </div>
+  </div>
+
+  <div id="dock" class="panel">
+    <div id="transport">
+      <button class="ctl play" id="playBack" title="Play backwards into the past (J)">◀</button>
+      <button class="ctl play" id="playFwd" title="Play forwards into the future (L)">▶</button>
+      <button class="ctl" id="chartbtn" aria-expanded="false" aria-controls="chartwrap"
+              aria-label="Show the distance–time chart">Chart</button>
+      <div id="tnow">today</div>
+      <div class="hint">drag the slider, or grab the cursor line in the chart
+        <span id="axisnote">time is log-spaced either side of <b>now</b> — the
+          next 10,000 years take a tenth of the axis, not a five-hundredth.
+          A selected star's bar is its 16th–84th percentile closest approach.</span>
+      </div>
+      <!-- Years of simulation per second of wall clock. Labeled with the rate
+           because that is the only thing that makes it predictable: at 50 kyr/s
+           a typical 50 km/s star takes about sixteen seconds to cross a 40 pc
+           field, which is a speed you can actually follow. The fast settings
+           are for getting somewhere, not for watching. -->
+      <select id="speed" title="playback speed: years of simulation per second">
+        <option value="0.01">10 kyr/s</option>
+        <option value="0.05" selected>50 kyr/s</option>
+        <option value="0.25">250 kyr/s</option>
+        <option value="1">1 Myr/s</option>
+      </select>
+      <button class="ctl" id="reset">Today</button>
+    </div>
+    <div id="scrubrow">
+      <input type="range" id="scrub" min="-1" max="1" step="0.0002" value="0"
+             aria-label="Time" aria-describedby="tnow">
+    </div>
+    <div id="chartwrap"><canvas id="chart" role="img"
+        aria-label="Distance from the Sun against time. The same values appear as text
+                    in the star list and detail panel."></canvas>
+</div>
+  </div>
+
+  <div id="tip"></div>
+  <div id="loading">loading catalog…</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+{
+  "window_myr": 0.25,
+  "rate_within_1pc_per_myr": 20.69,
+  "stat_error": 0.89,
+  "sys_error": 2.42,
+  "n_encounters_in_fit": 535,
+  "published": {
+    "value": 19.7,
+    "error": 2.2,
+    "source": "Bailer-Jones et al. 2018, A&A 616, A37 (Gaia DR2)"
+  },
+  "sigma_from_published": 0.29,
+  "completeness": [
+    {
+      "bin_pc": [
+        0,
+        5
+      ],
+      "census": 50,
+      "gaia_rv": 34,
+      "ours": 44,
+      "c_gaia_rv": 0.68,
+      "c_ours": 0.88
+    },
+    {
+      "bin_pc": [
+        5,
+        10
+      ],
+      "census": 265,
+      "gaia_rv": 182,
+      "ours": 235,
+      "c_gaia_rv": 0.6868,
+      "c_ours": 0.8868
+    },
+    {
+      "bin_pc": [
+        10,
+        15
+      ],
+      "census": 756,
+      "gaia_rv": 553,
+      "ours": 675,
+      "c_gaia_rv": 0.7315,
+      "c_ours": 0.8929
+    },
+    {
+      "bin_pc": [
+        15,
+        20
+      ],
+      "census": 1555,
+      "gaia_rv": 1081,
+      "ours": 1243,
+      "c_gaia_rv": 0.6952,
+      "c_ours": 0.7994
+    },
+    {
+      "bin_pc": [
+        20,
+        25
+      ],
+      "census": 2697,
+      "gaia_rv": 1806,
+      "ours": 2025,
+      "c_gaia_rv": 0.6696,
+      "c_ours": 0.7508
+    },
+    {
+      "bin_pc": [
+        25,
+        30
+      ],
+      "census": 4032,
+      "gaia_rv": 2577,
+      "ours": 2809,
+      "c_gaia_rv": 0.6391,
+      "c_ours": 0.6967
+    }
+  ],
+  "by_perihelion": [
+    {
+      "d_ph_pc": 1.0,
+      "n": 12,
+      "raw_per_myr": 24.0,
+      "corrected_per_myr": 28.35,
+      "per_d2": 28.35
+    },
+    {
+      "d_ph_pc": 1.5,
+      "n": 26,
+      "raw_per_myr": 52.0,
+      "corrected_per_myr": 64.33,
+      "per_d2": 28.59
+    },
+    {
+      "d_ph_pc": 2.0,
+      "n": 37,
+      "raw_per_myr": 74.0,
+      "corrected_per_myr": 92.5,
+      "per_d2": 23.13
+    },
+    {
+      "d_ph_pc": 2.5,
+      "n": 59,
+      "raw_per_myr": 118.0,
+      "corrected_per_myr": 144.82,
+      "per_d2": 23.17
+    },
+    {
+      "d_ph_pc": 3.0,
+      "n": 79,
+      "raw_per_myr": 158.0,
+      "corrected_per_myr": 195.83,
+      "per_d2": 21.76
+    },
+    {
+      "d_ph_pc": 4.0,
+      "n": 130,
+      "raw_per_myr": 260.0,
+      "corrected_per_myr": 320.01,
+      "per_d2": 20.0
+    },
+    {
+      "d_ph_pc": 5.0,
+      "n": 192,
+      "raw_per_myr": 384.0,
+      "corrected_per_myr": 468.15,
+      "per_d2": 18.73
+    }
+  ],
+  "kinetic_check": {
+    "density_per_pc3": {
+      "5": 0.0955,
+      "10": 0.0752,
+      "20": 0.0784,
+      "30": 0.0827
+    },
+    "mean_speed_km_s": 48.39,
+    "gamma_per_myr": {
+      "n=0.08": 12.4,
+      "n=0.1": 15.5,
+      "n=0.12": 18.7
+    }
+  },
+  "caveat": "Corrected for this catalog's completeness against the Gaia census only. Stars missing from that census - the faintest M dwarfs, brown dwarfs, anything lost beside a bright neighbor - are not corrected for, so this remains a lower bound."
+}
