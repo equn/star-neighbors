@@ -109,7 +109,7 @@ layout(location=1) in float a_size;
 layout(location=3) in float a_absg;   // absolute G; 99 where there is none
 layout(location=4) in float a_vis;    // 1 if the filters keep this star
 
-uniform sampler2D u_coeffs;      // NC wide, n tall; rgb = x,y,z coefficient
+uniform sampler2D u_coeffs;      // stars in a grid of NC-wide blocks; rgb = x,y,z coefficient
 uniform float u_basis[${NC}];
 uniform mat4 u_vp;
 uniform float u_pxScale;
@@ -127,8 +127,9 @@ void main() {
   int id = gl_VertexID;
   v_id = id;
   vec3 p = vec3(0.0);
+  ivec2 cell = ivec2((id % ${texCols}) * ${NC}, id / ${texCols});
   for (int k = 0; k < ${NC}; k++) {
-    p += texelFetch(u_coeffs, ivec2(k, id), 0).rgb * u_basis[k];
+    p += texelFetch(u_coeffs, cell + ivec2(k, 0), 0).rgb * u_basis[k];
   }
 
   float d = length(p);
@@ -253,7 +254,7 @@ function program(vs, fs) {
   return p;
 }
 
-let progStars, progLines, vaoStars, vaoLines, texCoeffs, uni = {}, lineCount = 0;
+let progStars, progLines, vaoStars, vaoLines, texCoeffs, texCols = 1, uni = {}, lineCount = 0;
 let oortStart = 0, oortCount = 0;
 let vaoTrail, bufTrail, trailCount = 0;
 let bufVis = null;
@@ -283,6 +284,13 @@ const TRAIL_N = 320;
 
 function initGL() {
   if (!HAS_GL) return;
+  // Stars per texture row. The texture used to be one star per row - 13 wide
+  // and 12,218 tall - which Chrome accepts (its limit is 16,384) and Firefox
+  // rejects outright: it caps textures at 8,192, texImage2D failed with
+  // INVALID_VALUE, every texelFetch read zero, and all 12,218 stars were drawn
+  // on top of the Sun. A near-square grid is ~400 px a side, well inside the
+  // 2,048 every WebGL2 implementation must support.
+  texCols = Math.ceil(Math.sqrt(S.n / NC));
   progStars = program(VERT(), FRAG());
   progLines = program(LVERT, LFRAG);
   for (const k of ['u_coeffs', 'u_basis', 'u_vp', 'u_pxScale', 'u_radius',
@@ -294,10 +302,11 @@ function initGL() {
   uni.l_col = gl.getUniformLocation(progLines, 'u_col');
   uni.l_nudge = gl.getUniformLocation(progLines, 'u_nudge');
 
-  // --- coefficient texture: NC wide, n tall, RGBA32F -------------------------
-  const tex = new Float32Array(S.n * NC * 4);
+  // --- coefficient texture: a grid of NC-wide blocks, RGBA32F ----------------
+  const texW = texCols * NC, texH = Math.ceil(S.n / texCols);
+  const tex = new Float32Array(texW * texH * 4);
   for (let i = 0; i < S.n; i++) {
-    const src = i * 3 * NC, dst = i * NC * 4;
+    const src = i * 3 * NC, dst = (Math.floor(i / texCols) * texW + (i % texCols) * NC) * 4;
     for (let k = 0; k < NC; k++) {
       tex[dst + k * 4 + 0] = S.coeffs[src + k];
       tex[dst + k * 4 + 1] = S.coeffs[src + NC + k];
@@ -311,7 +320,7 @@ function initGL() {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, NC, S.n, 0, gl.RGBA, gl.FLOAT, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, texW, texH, 0, gl.RGBA, gl.FLOAT, tex);
 
   // --- per-star attributes ---------------------------------------------------
   const col = new Float32Array(S.n * 3);
